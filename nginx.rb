@@ -12,9 +12,9 @@ class Nginx < Formula
 
   def patches
     [
-      "http://apt.github.com/homebrew/nginx/msec_start_msec.patch",
-      "http://apt.github.com/homebrew/nginx/spdy-53.patch",
-      "http://apt.github.com/homebrew/nginx/url-encode.patch"
+      "http://apt.onehub.com/homebrew/nginx/msec_start_msec.patch",
+      "http://apt.onehub.com/homebrew/nginx/spdy-53.patch",
+      "http://apt.onehub.com/homebrew/nginx/url-encode.patch"
     ]
   end
 
