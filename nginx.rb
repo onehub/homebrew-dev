@@ -121,7 +121,6 @@ class Nginx < Formula
     </plist>
     EOS
   end
-end
 
   protected
 
