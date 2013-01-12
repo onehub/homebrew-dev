@@ -112,8 +112,6 @@ class Nginx < Formula
         <key>ProgramArguments</key>
         <array>
             <string>#{opt_prefix}/sbin/nginx</string>
-            <string>-g</string>
-            <string>daemon off;</string>
         </array>
         <key>WorkingDirectory</key>
         <string>#{HOMEBREW_PREFIX}</string>
