@@ -82,6 +82,7 @@ class Nginx < Formula
     system "make install"
     man8.install "objs/nginx.8"
     (var/'run/nginx').mkpath
+    (var/'cache/nginx/client_temp').mkpath
   end
 
   def caveats; <<-EOS.undent
