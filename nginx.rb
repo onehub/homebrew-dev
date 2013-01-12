@@ -88,8 +88,8 @@ class Nginx < Formula
   def caveats; <<-EOS.undent
     You can start nginx automatically on login running as your user with:
       mkdir -p ~/Library/LaunchAgents
-      cp #{plist_path} ~/Library/LaunchAgents/
-      launchctl load -w ~/Library/LaunchAgents/#{plist_path.basename}
+      sudo cp #{plist_path} ~/Library/LaunchAgents/
+      sudo launchctl load -w ~/Library/LaunchAgents/#{plist_path.basename}
 
     Though note that if running as your user, the launch agent will fail if you
     try to use a port below 1024 (such as http's default of 80.)
@@ -108,7 +108,7 @@ class Nginx < Formula
         <key>KeepAlive</key>
         <false/>
         <key>UserName</key>
-        <string>#{`whoami`.chomp}</string>
+        <string>root</string>
         <key>ProgramArguments</key>
         <array>
             <string>#{opt_prefix}/sbin/nginx</string>
