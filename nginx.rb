@@ -72,8 +72,6 @@ class Nginx < Formula
       "--with-http_stub_status_module"
     ]
 
-    args << "--with-http_dav_module" if ARGV.include? '--with-webdav'
-
     # Third party modules
     args << upload_config_args
     args << zip_config_args
