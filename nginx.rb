@@ -2,43 +2,19 @@ require 'formula'
 
 class Nginx < Formula
   homepage 'http://nginx.org/'
-  url 'http://nginx.org/download/nginx-1.0.0.tar.gz'
-  md5 '5751c920c266ea5bb5fc38af77e9c71c'
+  url 'http://nginx.org/download/nginx-1.3.8.tar.gz'
+  md5 '538dce8d18b7a2c855134668d6078252'
 
-  depends_on 'pcre'
+  depends_on 'pcre', 'openssl'
 
   skip_clean 'logs'
 
   def patches
-    # Changes default port to 8080
-    # Set configure to look in homebrew prefix for pcre
-    DATA
-  end
-
-  def options
     [
-      ['--with-debug',        "Compile with support for debugging"],
-      ['--with-gzip-static',  "Compile with support for Gzip Static module"],
-      ['--with-stub-status',  "Compile with support for Stub Status module"],
-      ['--with-passenger',    "Compile with support for Phusion Passenger module"],
-      ['--with-webdav',       "Compile with support for WebDAV module"],
-      ['--with-upload',       "Compile with support for Upload module"],
-      ['--with-zip',          "Compile with support for Zip module"],
-      ['--with-headers-more', "Compile with support for Headers More module"]
+      "http://apt.github.com/homebrew/nginx/msec_start_msec.patch",
+      "http://apt.github.com/homebrew/nginx/spdy-53.patch",
+      "http://apt.github.com/homebrew/nginx/url-encode.patch"
     ]
-  end
-
-  def passenger_config_args
-      passenger_root = `passenger-config --root`.chomp
-
-      if File.directory?(passenger_root)
-        return "--add-module=#{passenger_root}/ext/nginx"
-      end
-
-      puts "Unable to install nginx with passenger support. The passenger"
-      puts "gem must be installed and passenger-config must be in your path"
-      puts "in order to continue."
-      exit
   end
 
   def upload_config_args
@@ -60,74 +36,92 @@ class Nginx < Formula
   end
 
   def install
-    args = ["--prefix=#{prefix}",
-            "--with-http_ssl_module",
-            "--with-pcre",
-            "--conf-path=#{etc}/nginx/nginx.conf",
-            "--pid-path=#{var}/run/nginx.pid",
-            "--lock-path=#{var}/nginx/nginx.lock"]
+    args = [
+      "--prefix=#{prefix}",
+      "--conf-path=#{etc}/nginx/nginx.conf",
+      "--error-log-path=#{var}/nginx/error.log",
+      "--http-log-path=#{var}/nginx/access.log",
+      "--http-client-body-temp-path=#{var}/cache/nginx/client_temp",
+      "--http-proxy-temp-path=#{var}/cache/nginx/proxy_temp",
+      "--http-fastcgi-temp-path=#{var}/cache/nginx/fastcgi_temp",
+      "--http-uwsgi-temp-path=#{var}/cache/nginx/uwsgi_temp",
+      "--http-scgi-temp-path=#{var}/cache/nginx/scgi_temp",
+      "--lock-path=#{var}/lock/nginx.lock",
+      "--pid-path=#{var}/run/nginx.pid",
+      "--with-pcre-jit",
+      "--with-debug",
+      "--with-ipv6",
+      "--without-http_browser_module",
+      "--without-http_empty_gif_module",
+      "--without-http_fastcgi_module",
+      "--without-http_geo_module",
+      "--without-http_memcached_module",
+      "--without-http_referer_module",
+      "--without-http_scgi_module",
+      "--without-http_split_clients_module",
+      "--without-http_ssi_module",
+      "--without-http_userid_module",
+      "--without-http_uwsgi_module",
+      "--without-mail_pop3_module",
+      "--without-mail_imap_module",
+      "--without-mail_smtp_module",
+      "--with-http_gzip_static_module",
+      "--with-http_realip_module",
+      "--with-http_ssl_module",
+      "--with-http_stub_status_module"
+    ]
 
-    # Core modules
-    args << "--with-debug" if ARGV.include? '--with-debug'
-    args << "--with-http_gzip_static_module" if ARGV.include? "--with-gzip-static"
-    args << "--with-http_stub_status_module" if ARGV.include? "--with-stub-status"
     args << "--with-http_dav_module" if ARGV.include? '--with-webdav'
 
     # Third party modules
-    args << passenger_config_args if ARGV.include? '--with-passenger'
-    args << upload_config_args if ARGV.include? '--with-upload'
-    args << zip_config_args if ARGV.include? '--with-zip'
-    args << headers_more_config_args if ARGV.include? '--with-headers-more'
+    args << upload_config_args
+    args << zip_config_args
+    args << headers_more_config_args
 
-    system "./configure", *args
+  system "./configure", *args
+    system "make"
     system "make install"
-
-    (prefix+'org.nginx.plist').write startup_plist
+    man8.install "objs/nginx.8"
+    (var/'run/nginx').mkpath
   end
 
-  def caveats
-    <<-CAVEATS
-In the interest of allowing you to run `nginx` without `sudo`, the default
-port is set to localhost:8080.
+  def caveats; <<-EOS.undent
+    You can start nginx automatically on login running as your user with:
+      mkdir -p ~/Library/LaunchAgents
+      cp #{plist_path} ~/Library/LaunchAgents/
+      launchctl load -w ~/Library/LaunchAgents/#{plist_path.basename}
 
-If you want to host pages on your local machine to the public, you should
-change that to localhost:80, and run `sudo nginx`. You'll need to turn off
-any other web servers running port 80, of course.
-
-You can start nginx automatically on login with:
-    mkdir -p ~/Library/LaunchAgents
-    cp #{prefix}/org.nginx.plist ~/Library/LaunchAgents/
-    launchctl load -w ~/Library/LaunchAgents/org.nginx.plist
-
-    CAVEATS
+    Though note that if running as your user, the launch agent will fail if you
+    try to use a port below 1024 (such as http's default of 80.)
+    EOS
   end
 
-  def startup_plist
-    return <<-EOPLIST
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-  <dict>
-    <key>Label</key>
-    <string>org.nginx</string>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>KeepAlive</key>
-    <true/>
-    <key>UserName</key>
-    <string>#{`whoami`.chomp}</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>#{sbin}/nginx</string>
-        <string>-g</string>
-        <string>daemon off;</string>
-    </array>
-    <key>WorkingDirectory</key>
-    <string>#{HOMEBREW_PREFIX}</string>
-  </dict>
-</plist>
-    EOPLIST
+  def plist; <<-EOS.undent
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+      <dict>
+        <key>Label</key>
+        <string>#{plist_name}</string>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>KeepAlive</key>
+        <false/>
+        <key>UserName</key>
+        <string>#{`whoami`.chomp}</string>
+        <key>ProgramArguments</key>
+        <array>
+            <string>#{opt_prefix}/sbin/nginx</string>
+            <string>-g</string>
+            <string>daemon off;</string>
+        </array>
+        <key>WorkingDirectory</key>
+        <string>#{HOMEBREW_PREFIX}</string>
+      </dict>
+    </plist>
+    EOS
   end
+end
 
   protected
 
@@ -141,7 +135,7 @@ You can start nginx automatically on login with:
   end
 
   def nginx_upload_module_url
-    "http://apt.onehub.com/nginx_modules/nginx_upload_module-2.0.12c.tar.gz"
+    "http://apt.onehub.com/homebrew/nginx/nginx_upload_module-2.0.12c.tar.gz"
   end
 
   def nginx_upload_module_filename
@@ -162,7 +156,7 @@ You can start nginx automatically on login with:
   end
 
   def nginx_zip_module_url
-    "http://apt.onehub.com/nginx_modules/mod_zip-1.1.6.tar.gz"
+    "http://apt.onehub.com/homebrew/nginx/mod_zip-1.1.6.tar.gz"
   end
 
   def nginx_zip_module_filename
@@ -183,7 +177,7 @@ You can start nginx automatically on login with:
   end
 
   def nginx_headers_more_module_url
-    "http://apt.onehub.com/nginx_modules/headers-more-0.13.tar.gz"
+    "http://apt.onehub.com/homebrew/nginx/headers-more-0.19.tar.gz"
   end
 
   def nginx_headers_more_module_filename
@@ -194,42 +188,3 @@ You can start nginx automatically on login with:
     nginx_headers_more_module_filename.sub(".tar.gz", "")
   end
 end
-
-__END__
---- a/auto/lib/pcre/conf
-+++ b/auto/lib/pcre/conf
-@@ -155,6 +155,22 @@ else
-             . auto/feature
-         fi
-
-+        if [ $ngx_found = no ]; then
-+
-+            # Homebrew
-+            HOMEBREW_PREFIX=${NGX_PREFIX%Cellar*}
-+            ngx_feature="PCRE library in ${HOMEBREW_PREFIX}"
-+            ngx_feature_path="${HOMEBREW_PREFIX}/include"
-+
-+            if [ $NGX_RPATH = YES ]; then
-+                ngx_feature_libs="-R${HOMEBREW_PREFIX}/lib -L${HOMEBREW_PREFIX}/lib -lpcre"
-+            else
-+                ngx_feature_libs="-L${HOMEBREW_PREFIX}/lib -lpcre"
-+            fi
-+
-+            . auto/feature
-+        fi
-+
-         if [ $ngx_found = yes ]; then
-             CORE_DEPS="$CORE_DEPS $REGEX_DEPS"
-             CORE_SRCS="$CORE_SRCS $REGEX_SRCS"
---- a/conf/nginx.conf
-+++ b/conf/nginx.conf
-@@ -33,7 +33,7 @@
-     #gzip  on;
-
-     server {
--        listen       80;
-+        listen       8080;
-         server_name  localhost;
-
-         #charset koi8-r;
-
