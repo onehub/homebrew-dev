@@ -3,7 +3,7 @@ require 'formula'
 class Nginx < Formula
   homepage 'http://nginx.org/'
   url 'http://nginx.org/download/nginx-1.3.8.tar.gz'
-  md5 '538dce8d18b7a2c855134668d6078252'
+  sha1 '84ff39e3f76e9f496f4e05080885e04caf472bb9'
 
   depends_on 'pcre'
   depends_on 'openssl'
