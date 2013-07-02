@@ -2,8 +2,8 @@ require 'formula'
 
 class Nginx < Formula
   homepage 'http://nginx.org/'
-  url 'http://nginx.org/download/nginx-1.2.6.tar.gz'
-  sha1 '432059b668e3f018eab61f99c7cc727db88464e8'
+  url 'http://nginx.org/download/nginx-1.2.9.tar.gz'
+  sha1 '9f31266c0088561b0bdaa9238af8adf1a2fd0ba4'
 
   depends_on 'pcre'
   depends_on 'openssl'
@@ -13,7 +13,6 @@ class Nginx < Formula
   def patches
     [
       "http://apt.onehub.com/homebrew/nginx/msec_start_msec.patch",
-      #"http://apt.onehub.com/homebrew/nginx/spdy-53.patch",
       "http://apt.onehub.com/homebrew/nginx/url-encode.patch"
     ]
   end
