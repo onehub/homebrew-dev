@@ -173,7 +173,7 @@ class Nginx < Formula
   end
 
   def nginx_headers_more_module_url
-    "http://apt.onehub.com/homebrew/nginx/headers-more-nginx-module-0.19.tar.gz"
+    "http://apt.onehub.com/homebrew/nginx/headers-more-nginx-module-0.21.tar.gz"
   end
 
   def nginx_headers_more_module_filename
