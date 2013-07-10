@@ -1,0 +1,13 @@
+Index: nginx-1.0.13/src/core/ngx_string.c
+===================================================================
+--- nginx-1.0.13.orig/src/core/ngx_string.c	2012-03-12 10:31:04.094397402 -0700
++++ nginx-1.0.13/src/core/ngx_string.c	2012-03-12 10:31:14.494843319 -0700
+@@ -1339,7 +1339,7 @@
+ {
+     ngx_uint_t      n;
+     uint32_t       *escape;
+-    static u_char   hex[] = "0123456789abcdef";
++    static u_char   hex[] = "0123456789ABCDEF";
+ 
+                     /* " ", "#", "%", "?", %00-%1F, %7F-%FF */
+ 
