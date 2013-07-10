@@ -12,8 +12,8 @@ class Nginx < Formula
 
   def patches
     [
-      "https://github.com/onehub/homebrew-dev/raw/master/nginx/msec_start_msec.patch",
-      "https://github.com/onehub/homebrew-dev/raw/master/nginx/url-encode.patch"
+      "http://dev.onehub.com/homebrew/nginx/msec_start_msec.patch",
+      "http://dev.onehub.com/homebrew/nginx/url-encode.patch"
     ]
   end
 
@@ -131,7 +131,7 @@ class Nginx < Formula
   end
 
   def nginx_upload_module_url
-    "https://github.com/onehub/homebrew-dev/raw/master/nginx/nginx_upload_module-2.0.12c.tar.gz"
+    "http://dev.onehub.com/homebrew/nginx/nginx_upload_module-2.0.12c.tar.gz"
   end
 
   def nginx_upload_module_filename
@@ -152,7 +152,7 @@ class Nginx < Formula
   end
 
   def nginx_zip_module_url
-    "https://github.com/onehub/homebrew-dev/raw/master/nginx/mod_zip-1.1.6.tar.gz"
+    "http://dev.onehub.com/homebrew/nginx/mod_zip-1.1.6.tar.gz"
   end
 
   def nginx_zip_module_filename
@@ -173,7 +173,7 @@ class Nginx < Formula
   end
 
   def nginx_headers_more_module_url
-    "https://github.com/onehub/homebrew-dev/raw/master/nginx/headers-more-nginx-module-0.21.tar.gz"
+    "http://dev.onehub.com/homebrew/nginx/headers-more-nginx-module-0.21.tar.gz"
   end
 
   def nginx_headers_more_module_filename
