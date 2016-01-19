@@ -131,7 +131,7 @@ class Nginx < Formula
   end
 
   def nginx_zip_module_url
-    "http://dev.onehub.com/homebrew/nginx/mod_zip-01ce916.tar.gz"
+    "http://dev.onehub.com/homebrew/nginx/mod_zip-master.tar.gz"
   end
 
   def nginx_zip_module_filename
