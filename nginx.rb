@@ -2,20 +2,13 @@ require 'formula'
 
 class Nginx < Formula
   homepage 'http://nginx.org/'
-  url 'http://nginx.org/download/nginx-1.2.9.tar.gz'
-  sha1 '9f31266c0088561b0bdaa9238af8adf1a2fd0ba4'
+  url 'http://nginx.org/download/nginx-1.9.5.tar.gz'
+  sha1 '669f1653f539358ad1d1b8281041f962597ec637'
 
   depends_on 'pcre'
   depends_on 'openssl'
 
   skip_clean 'logs'
-
-  def patches
-    [
-      "http://dev.onehub.com/homebrew/nginx/msec_start_msec.patch",
-      "http://dev.onehub.com/homebrew/nginx/url-encode.patch"
-    ]
-  end
 
   def upload_config_args
     prepare_nginx_upload_module
@@ -117,7 +110,7 @@ class Nginx < Formula
   end
 
   def nginx_upload_module_url
-    "http://dev.onehub.com/homebrew/nginx/nginx_upload_module-2.0.12c.tar.gz"
+    "http://dev.onehub.com/homebrew/nginx/nginx-upload-module-2.2-onehub.tar.gz"
   end
 
   def nginx_upload_module_filename
@@ -138,7 +131,7 @@ class Nginx < Formula
   end
 
   def nginx_zip_module_url
-    "http://dev.onehub.com/homebrew/nginx/mod_zip-1.1.6.tar.gz"
+    "http://dev.onehub.com/homebrew/nginx/mod_zip-01ce916.tar.gz"
   end
 
   def nginx_zip_module_filename
@@ -159,7 +152,7 @@ class Nginx < Formula
   end
 
   def nginx_headers_more_module_url
-    "http://dev.onehub.com/homebrew/nginx/headers-more-nginx-module-0.21.tar.gz"
+    "http://dev.onehub.com/homebrew/nginx/headers-more-nginx-module-0.261.tar.gz"
   end
 
   def nginx_headers_more_module_filename
