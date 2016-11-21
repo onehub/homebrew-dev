@@ -3,7 +3,7 @@ require 'formula'
 class Nginx < Formula
   homepage 'http://nginx.org/'
   url 'http://nginx.org/download/nginx-1.9.5.tar.gz'
-  sha1 '669f1653f539358ad1d1b8281041f962597ec637'
+  sha256 '48e2787a6b245277e37cb7c5a31b1549a0bbacf288aa4731baacf9eaacdb481b'
 
   depends_on 'pcre'
   depends_on 'openssl'
