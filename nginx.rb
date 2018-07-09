@@ -63,7 +63,7 @@ class Nginx < Formula
     (var/'cache/nginx/client_temp').mkpath
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     You can start nginx automatically on login running as your user with:
       mkdir -p ~/Library/LaunchAgents
       sudo cp #{plist_path} ~/Library/LaunchAgents/
@@ -74,7 +74,7 @@ class Nginx < Formula
     EOS
   end
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
