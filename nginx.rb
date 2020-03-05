@@ -110,7 +110,7 @@ class Nginx < Formula
   end
 
   def nginx_upload_module_url
-    "http://dev.onehub.com/homebrew/nginx/nginx-upload-module-2.2-onehub.tar.gz"
+    "http://www.grid.net.ru/nginx/download/nginx_upload_module-2.2.0.tar.gz"
   end
 
   def nginx_upload_module_filename
