@@ -46,6 +46,7 @@ class Nginx < Formula
       "--with-ipv6",
       "--with-http_gzip_static_module",
       "--with-http_realip_module",
+      "--with-http_image_filter_module",
       "--with-http_ssl_module",
       "--with-http_stub_status_module"
     ]
