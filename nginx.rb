@@ -41,7 +41,7 @@ class Nginx < Formula
       "--http-scgi-temp-path=#{var}/cache/nginx/scgi_temp",
       "--lock-path=#{var}/lock/nginx.lock",
       "--pid-path=#{var}/run/nginx.pid",
-      "--with-openssl=/usr/local/Cellar/openssl/1.0.2s",
+      "--with-openssl=./openssl",
       "--with-pcre-jit",
       "--with-debug",
       "--with-ipv6",
@@ -56,6 +56,8 @@ class Nginx < Formula
     args << upload_config_args
     args << zip_config_args
     args << headers_more_config_args
+
+  prepare_openssl
 
   system "./configure", *args
     system "make"
@@ -163,6 +165,10 @@ class Nginx < Formula
 
   def nginx_headers_more_module_dirname
     nginx_headers_more_module_filename.sub(".tar.gz", "")
+  end
+
+  def prepare_openssl
+    system "git clone --single-branch --branch OpenSSL_1_0_2-stable git@github.com:openssl/openssl.git"
   end
 
 end
