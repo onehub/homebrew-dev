@@ -41,7 +41,7 @@ class Nginx < Formula
       "--http-scgi-temp-path=#{var}/cache/nginx/scgi_temp",
       "--lock-path=#{var}/lock/nginx.lock",
       "--pid-path=#{var}/run/nginx.pid",
-      "--with-openssl=/usr/local/ssl",
+      "--with-openssl=./openssl",
       "--with-pcre-jit",
       "--with-debug",
       "--with-ipv6",
