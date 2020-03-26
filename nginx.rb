@@ -169,11 +169,6 @@ class Nginx < Formula
 
   def prepare_openssl
     system "git clone --single-branch --branch OpenSSL_1_0_2-stable git@github.com:openssl/openssl.git"
-    system "cd openssl"
-    system "./Configure darwin64-x86_64-cc"
-    system "make"
-    system "make test"
-    system "sudo make install"
   end
 
 end
