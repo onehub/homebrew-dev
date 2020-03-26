@@ -57,6 +57,8 @@ class Nginx < Formula
     args << zip_config_args
     args << headers_more_config_args
 
+  prepare_openssl
+
   system "./configure", *args
     system "make"
     system "make install"
@@ -164,4 +166,14 @@ class Nginx < Formula
   def nginx_headers_more_module_dirname
     nginx_headers_more_module_filename.sub(".tar.gz", "")
   end
+
+  def prepare_openssl
+    system "git clone --single-branch --branch OpenSSL_1_0_2-stable git@github.com:openssl/openssl.git"
+    system "cd openssl"
+    system "./Configure darwin64-x86_64-cc"
+    system "make"
+    system "make test"
+    system "sudo make install"
+  end
+
 end
