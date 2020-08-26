@@ -2,7 +2,7 @@ class Elasticsearch74 < Formula
   desc "Distributed search & analytics engine"
   homepage "https://www.elastic.co/products/elasticsearch"
   url "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.4.0-darwin-x86_64.tar.gz"
-  sha256 "1f0d999c7d7765658e60b14675474c998d8b73ca"
+  sha256 "ce819d92b889ac36608aff3bc7226741e1fe599328ef3221344933725286f1e3"
   license "Apache-2.0"
 
   bottle do
